@@ -10,4 +10,20 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: "1.23.2" # The Go version to download (if necessary) and use.
-      - run: go build -o pkg-manager-detector
+      - name: Build
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: |
+          echo "Building for $GOOS/$GOARCH..."
+          OUTPUT_NAME="node-package-manager-detector-${{ matrix.os }}-${{ matrix.arch }}"
+          if [ "${{ matrix.os }}" == "windows" ]; then
+            OUTPUT_NAME="${OUTPUT_NAME}.exe"
+          fi
+          go build -o dist/$OUTPUT_NAME .
+
+      - name: Upload Binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: binaries
+          path: dist/
