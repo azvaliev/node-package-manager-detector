@@ -18,6 +18,7 @@ jobs:
         env:
           GOOS: ${{ matrix.os }}
           GOARCH: ${{ matrix.arch }}
+          CGO_ENABLED: 0
         run: |
           echo "Building for $GOOS/$GOARCH..."
           OUTPUT_NAME="node-package-manager-detector-${{ matrix.os }}-${{ matrix.arch }}"
